@@ -12,6 +12,7 @@ class Algorithm(object):
         elif n_dividers == n_products - 1:
             costs = [u.round_to_5(c) for c in costs]
             return sum(costs)
+        return None
 
 
 class NoDividers(Algorithm):
@@ -20,7 +21,7 @@ class NoDividers(Algorithm):
 
     def run(self, n_products, n_dividers, costs):
         io.eprint("Using no dividers")
-        io.send(sum(costs))
+        return sum(costs)
 
 
 class DumbSinglePass(Algorithm):
@@ -35,23 +36,25 @@ class DumbSinglePass(Algorithm):
 
     def run(self, n_products, n_dividers, costs):
         # Run base cases
-        super().run(n_products, n_dividers, costs)
+        base_cost = super().run(n_products, n_dividers, costs)
+        if base_cost is not None:
+            return base_cost
 
         cost_of_group = 0
-        costs = []
+        costs_of_groups = []
         for i, c in enumerate(costs):
             # If we have used all dividers, sum remaining products
             if n_dividers == 0:
                 sum_remaining_prods = u.round_to_5(sum(costs[i:]))
-                costs.append(sum_remaining_prods)
+                costs_of_groups.append(sum_remaining_prods)
                 break
             # If adding a the product reduces our cost, add it
             if u.do_add_product(c, cost_of_group):
                 cost_of_group += c
             # If not, place a divider and start again from the current product
             else:
-                costs.append(u.round_to_5(cost_of_group))
+                costs_of_groups.append(u.round_to_5(cost_of_group))
                 cost_of_group = c
                 n_dividers -= 1
         # Return the sum of all groups of products, separated by dividers
-        return sum(costs)
+        return sum(costs_of_groups)
