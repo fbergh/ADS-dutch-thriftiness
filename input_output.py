@@ -11,8 +11,8 @@ def get_values_from_input():
     """
     n_prod_div_str = input().split(" ")
     n_products, n_dividers = int(n_prod_div_str[0]), int(n_prod_div_str[1])
-    assert 1 <= n_products <= 2500, "Number of products should be in range [1,2500]"
-    assert 0 <= n_dividers <= 25, "Number of products should be in range [0,25]"
+    assert 1 <= n_products <= 10000, "Number of products should be in range [1,2500]"
+    assert 0 <= n_dividers <= 100, "Number of products should be in range [0,25]"
 
     costs_str = input().split(" ")
     costs = [int(cost_str) for cost_str in costs_str]

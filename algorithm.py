@@ -40,16 +40,18 @@ class DumbSinglePass(Algorithm):
         if base_cost is not None:
             return base_cost
 
-        cost_of_group = 0
+        cost_of_group = -1
         costs_of_groups = []
         for i, c in enumerate(costs):
             # If we have used all dividers, sum remaining products
             if n_dividers == 0:
-                sum_remaining_prods = u.round_to_5(sum(costs[i:]))
+                sum_remaining_prods = u.round_to_5(cost_of_group + sum(costs[i:]))
                 costs_of_groups.append(sum_remaining_prods)
                 break
             # If adding a the product reduces our cost, add it
             if u.do_add_product(c, cost_of_group):
+                if cost_of_group == -1:
+                    cost_of_group = 0
                 cost_of_group += c
             # If not, place a divider and start again from the current product
             else:
