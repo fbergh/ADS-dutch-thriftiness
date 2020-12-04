@@ -15,15 +15,6 @@ class Algorithm(object):
         return None
 
 
-class NoDividers(Algorithm):
-    def __init__(self):
-        super(NoDividers, self).__init__()
-
-    def run(self, n_products, n_dividers, costs):
-        io.eprint("Using no dividers")
-        return sum(costs)
-
-
 class DumbSinglePass(Algorithm):
     """
     Sequentially adds costs that do not round up (so ending on 0, 1, 2, 5, 6, 7) to one group
@@ -71,15 +62,20 @@ class BruteForce(Algorithm):
         super(BruteForce, self).__init__()
 
     def run(self, n_products, n_dividers, costs):
-        start_checkout = [costs.pop(0)]
-        n_divs_used = 0
-        # Get all possible ways to order products
-        all_checkouts = self._brute_force_helper(start_checkout, costs, n_divs_used, n_dividers)
-        # Round all costs to 5
-        rounded_checkouts = [[u.round_to_5(cost) for cost in checkout] for checkout in all_checkouts]
-        # Compute the sum of all checkouts and return the minimum value
-        cost_checkouts = [sum(checkout) for checkout in rounded_checkouts]
-        return min(cost_checkouts)
+        # Run base cases
+        base_cost = super().run(n_products, n_dividers, costs)
+        if base_cost is not None:
+            return base_cost
+        else:
+            start_checkout = [costs.pop(0)]
+            n_divs_used = 0
+            # Get all possible ways to order products
+            all_checkouts = self._brute_force_helper(start_checkout, costs, n_divs_used, n_dividers)
+            # Round all costs to 5
+            rounded_checkouts = [[u.round_to_5(cost) for cost in checkout] for checkout in all_checkouts]
+            # Compute the sum of all checkouts and return the minimum value
+            cost_checkouts = [sum(checkout) for checkout in rounded_checkouts]
+            return min(cost_checkouts)
 
     def _brute_force_helper(self, checkout, costs, n_divs_used, n_dividers):
         """
