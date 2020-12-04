@@ -1,5 +1,5 @@
 import input_output as io
-from algorithm import NoDividers, DumbSinglePass, BruteForce
+from algorithm import DumbSinglePass, BruteForce
 import random
 
 
