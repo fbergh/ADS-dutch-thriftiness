@@ -1,17 +1,14 @@
-import input_output as io
 import utils as u
+import math
 
 
 class Algorithm(object):
     """ Base class for algorithms """
+
     def run(self, n_products, n_dividers, costs):
         # If we have no dividers, we can sum the costs and round them
         if n_dividers == 0:
             return u.round_to_5(sum(costs))
-        # If there are n_products-1 dividers, we round each cost individually and then sum the costs
-        elif n_dividers == n_products - 1:
-            costs = [u.round_to_5(c) for c in costs]
-            return sum(costs)
         return None
 
 
@@ -22,6 +19,7 @@ class DumbSinglePass(Algorithm):
     If there are no more dividers left, simply sum the remaining products
     In the end returns sum of all product groups
     """
+
     def __init__(self):
         super(DumbSinglePass, self).__init__()
 
@@ -58,8 +56,10 @@ class BruteForce(Algorithm):
     Brute force algorithm that tries all possible combinations given the number of dividers
     Always returns correct answer but has complexity 2^n (because it creates a binary tree if n_dividers=0)
     """
+
     def __init__(self):
         super(BruteForce, self).__init__()
+        self.min_checkout = math.inf
 
     def run(self, n_products, n_dividers, costs):
         # Run base cases
@@ -67,15 +67,31 @@ class BruteForce(Algorithm):
         if base_cost is not None:
             return base_cost
         else:
+            # Set initial minimum to checkout with no dividers
+            self.min_checkout = u.round_to_5(sum(costs))
+
+            # Get all values for which holds value % 5 = 0
+            # The order of these values doesn't matter (because they don't have to be rounded) and can be added
+            # in the end
+            mod_5_values = self.get_mod_5_values(n_products, costs)
+            print(mod_5_values)
+
             start_checkout = [costs.pop(0)]
             n_divs_used = 0
             # Get all possible ways to order products
             all_checkouts = self._brute_force_helper(start_checkout, costs, n_divs_used, n_dividers)
-            # Round all costs to 5
-            rounded_checkouts = [[u.round_to_5(cost) for cost in checkout] for checkout in all_checkouts]
-            # Compute the sum of all checkouts and return the minimum value
-            cost_checkouts = [sum(checkout) for checkout in rounded_checkouts]
+            print(all_checkouts)
+            # Compute total (rounded) cost of checkouts (add mod 5 values)
+            cost_checkouts = [u.cost_of_checkout(checkout) + sum(mod_5_values) for checkout in all_checkouts]
+            print(cost_checkouts)
             return min(cost_checkouts)
+
+    def get_mod_5_values(self, n_products, costs):
+        mod_5_values = []
+        for i in reversed(range(n_products)):
+            if costs[i] % 5 == 0:
+                mod_5_values.append(costs.pop(i))
+        return mod_5_values
 
     def _brute_force_helper(self, checkout, costs, n_divs_used, n_dividers):
         """
@@ -85,13 +101,23 @@ class BruteForce(Algorithm):
         all_checkouts = []
         # Base case: if we have had all products, return the current checkout
         if len(costs) == 0:
+            # Set new minimum checkout for pruning
+            if u.cost_of_checkout(checkout) < self.min_checkout:
+                self.min_checkout = u.cost_of_checkout(checkout)
             return [checkout]
         # Base case: if we have used all our dividers, add all remaining products to current product group
         elif n_divs_used == n_dividers:
             checkout[-1] += sum(costs)
+            # Set new minimum checkout for pruning
+            if u.cost_of_checkout(checkout) < self.min_checkout:
+                self.min_checkout = u.cost_of_checkout(checkout)
             return [checkout]
         # Recursive case: do and do not place divider
         else:
+            # If the cost of the current checkout is equal or greater to the current minimum, prune this branch
+            if u.cost_of_checkout(checkout) >= self.min_checkout:
+                return []
+
             # Get the new cost (and remove it from the costs list)
             cur_cost = costs.pop(0)
 
