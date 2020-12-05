@@ -18,3 +18,7 @@ def do_add_product(product, cur_cost):
 def value(cost):
     # % 10, because we want last digit. % 5, because values in VALUE_DICT are the same after 4
     return VALUE_DICT[cost % 10 % 5] if cost != -1 else VALUE_DICT[cost]
+
+
+def cost_of_checkout(checkout):
+    return sum([round_to_5(cost) for cost in checkout])
