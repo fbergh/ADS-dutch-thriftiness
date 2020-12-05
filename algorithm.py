@@ -73,7 +73,7 @@ class BruteForce(Algorithm):
             # Get all values for which holds value % 5 = 0
             # The order of these values doesn't matter (because they don't have to be rounded) and can be added
             # in the end
-            mod_5_values = self.get_mod_5_values(n_products, costs)
+            mod_5_values = self._get_mod_5_values(n_products, costs)
             print(mod_5_values)
 
             start_checkout = [costs.pop(0)]
@@ -86,7 +86,7 @@ class BruteForce(Algorithm):
             print(cost_checkouts)
             return min(cost_checkouts)
 
-    def get_mod_5_values(self, n_products, costs):
+    def _get_mod_5_values(self, n_products, costs):
         mod_5_values = []
         for i in reversed(range(n_products)):
             if costs[i] % 5 == 0:
