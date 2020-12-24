@@ -113,20 +113,22 @@ class CheckoutCutting(Algorithm):
         if base_case_cost is not None:
             return base_case_cost
         else:
-            return self.checkout_cutting(n_dividers, costs)
+            mod_5_values = u.get_mod_5_values(costs)
+            print("Mod 5 values: ", mod_5_values)
+            return sum(mod_5_values) + self.checkout_cutting(n_dividers, costs)
 
-    def checkout_cutting(self, n_dividers, costs):
-        print(costs)
-        if len(costs) == 1 or n_dividers == 0:
-            return u.cost_of_checkout([costs])
+    def checkout_cutting(self, n_dividers, checkout):
+        print("Current checkout: ", checkout)
+        if len(checkout) == 1 or n_dividers == 0:
+            return u.cost_of_checkout([checkout])
         else:
             # Set best_checkout to checkout with no dividers to determine if it's even worth placing dividers
-            best_checkout = [costs]
+            best_checkout = [checkout]
             # Bad initial values for gain
             best_gain = (-math.inf, -math.inf)
             # For every position where we can place the divider (so not 0)
-            for div_pos in range(1, len(costs)):
-                cur_checkout = [u.to_list(costs[:div_pos]), u.to_list(costs[div_pos:])]
+            for div_pos in range(1, len(checkout)):
+                cur_checkout = [u.to_list(checkout[:div_pos]), u.to_list(checkout[div_pos:])]
                 cur_gain = u.gain_of_checkout(cur_checkout)
                 if self.is_cur_checkout_better(best_checkout, best_gain, cur_checkout, cur_gain):
                     best_checkout = cur_checkout
