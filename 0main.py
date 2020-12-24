@@ -1,5 +1,6 @@
 import input_output as io
-from algorithm import DumbSinglePass, BruteForce
+from problem_io import *
+from algorithm import BruteForce
 import random
 
 
@@ -11,16 +12,34 @@ def test_server():
     io.send(min_sum)
 
 
-def test_local():
-    random.seed(1)
-    n_products = 100
-    n_dividers = random.randint(0, 25)
-    costs = [random.randint(1, 50) for _ in range(n_products)]
-    print(costs)
-    algorithm = BruteForce()
-    min_sum = algorithm.run(n_products, n_dividers, costs)
-    print(min_sum)
+def test_local(algorithm, n_problems, seed=None):
+    brute = BruteForce()
+
+    print("Sample problem 1")
+    n_products, n_dividers, costs = data_sample1()
+    print(algorithm.run(n_products, n_dividers, costs.copy()) == 755, "\n")
+
+    print("Sample problem 2")
+    n_products, n_dividers, costs = data_sample2()
+    print(algorithm.run(n_products, n_dividers, costs.copy()) == 0, "\n")
+
+    if seed is not None:
+        random.seed(seed)
+
+    correct = []
+
+    for i in range(n_problems):
+        print(f"--- Problem {i+1} ---")
+        n_products, n_dividers, costs = data_random(10)
+        correct_answer = brute.run(n_products, n_dividers, costs.copy())
+        print()
+        answer = algorithm.run(n_products, n_dividers, costs.copy())
+        correct.append(correct_answer == answer)
+        print(f"\nBrute force: {correct_answer}\nAlgorithm: {answer}\nCorrect: {correct_answer == answer}")
+
+    print(f"\nNumber correct: {sum(correct)}/{n_problems}")
 
 
 if __name__ == '__main__':
-    test_local()
+    a = BruteForce()
+    test_local(a, 10)
