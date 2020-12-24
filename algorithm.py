@@ -16,6 +16,8 @@ class BruteForce(Algorithm):
     """
     Brute force algorithm that tries all possible combinations given the number of dividers
     Always returns correct answer but has complexity 2^n (because it creates a binary tree if n_dividers=0)
+
+    NOTE: sometimes it crashes, haven't looked into why though
     """
 
     def __init__(self):
@@ -108,6 +110,7 @@ class CheckoutCutting(Algorithm):
         super(CheckoutCutting, self).__init__()
 
     def run(self, n_products, n_dividers, costs):
+        print("CheckoutCutting")
         # Run base cases
         base_case_cost = super().run(n_products, n_dividers, costs)
         if base_case_cost is not None:
