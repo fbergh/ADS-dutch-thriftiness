@@ -62,6 +62,7 @@ class BruteForce(Algorithm):
         self.min_checkout = math.inf
 
     def run(self, n_products, n_dividers, costs):
+        print("Brute force")
         # Run base cases
         base_cost = super().run(n_products, n_dividers, costs)
         if base_cost is not None:
@@ -73,25 +74,18 @@ class BruteForce(Algorithm):
             # Get all values for which holds value % 5 = 0
             # The order of these values doesn't matter (because they don't have to be rounded) and can be added
             # in the end
-            mod_5_values = self._get_mod_5_values(n_products, costs)
-            print(mod_5_values)
+            mod_5_values = u.get_mod_5_values(costs)
+            print("Mod 5 values: ", mod_5_values)
 
             start_checkout = [costs.pop(0)]
             n_divs_used = 0
             # Get all possible ways to order products
             all_checkouts = self._brute_force_helper(start_checkout, costs, n_divs_used, n_dividers)
-            print(all_checkouts)
+            print("All checkouts: ", all_checkouts)
             # Compute total (rounded) cost of checkouts (add mod 5 values)
             cost_checkouts = [u.cost_of_checkout(checkout) + sum(mod_5_values) for checkout in all_checkouts]
-            print(cost_checkouts)
+            print("Cost of all checkouts: ", cost_checkouts)
             return min(cost_checkouts)
-
-    def _get_mod_5_values(self, n_products, costs):
-        mod_5_values = []
-        for i in reversed(range(n_products)):
-            if costs[i] % 5 == 0:
-                mod_5_values.append(costs.pop(i))
-        return mod_5_values
 
     def _brute_force_helper(self, checkout, costs, n_divs_used, n_dividers):
         """
