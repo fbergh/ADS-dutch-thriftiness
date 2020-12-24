@@ -2,8 +2,8 @@ import random
 
 
 def data_random(n_products):
-    costs = [random.randint(1, 10) for _ in range(n_products)]
-    n_dividers = random.randint(0, 25)
+    costs = [random.randint(1, 9) for _ in range(n_products)]
+    n_dividers = random.randint(0, len(costs) - 1)
     return n_products, n_dividers, costs
 
 
