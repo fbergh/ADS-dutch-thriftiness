@@ -21,7 +21,19 @@ def gain(cost):
 
 
 def cost_of_checkout(checkout):
-    return sum([round_to_5(cost)for cost in checkout])
+    if any(isinstance(el, list) for el in checkout):
+        return sum([round_to_5(sum(product_group)) for product_group in checkout])
+    else:
+        return sum([round_to_5(cost)for cost in checkout])
+
+
+def gain_of_checkout(checkout_with_divider):
+    left, right = checkout_with_divider
+    if type(left) == int:
+        left = [left]
+    if type(right) == int:
+        right = [right]
+    return gain(sum(left)), gain(sum(right))
 
 
 def get_mod_5_values(costs):
@@ -30,3 +42,10 @@ def get_mod_5_values(costs):
         if costs[i] % 5 == 0:
             mod_5_values.append(costs.pop(i))
     return mod_5_values
+
+
+def to_list(value):
+    if type(value) == int:
+        return [value]
+    else:
+        return value
