@@ -32,33 +32,32 @@ def brute_force(n_products, n_dividers, costs):
     return current_best, best_arrangements
 
 
-### "GREEDY" TWO-CHOICES ALGORITHM ###
+### GREEDY ALGORITHM ###
 
-def greedy_two_choices(n_products, n_dividers, costs):
-    """ 'Greedy' algorithm that considers two greedy choices at each step """
-    # Set parameters
-    reached_one = False
-    reached_two = False
-    total_cost = round_to_five(sum(costs))
-    solution_one = (total_cost, [])
-    solution_two = (total_cost, [])
-    first_cost = 0
-    index = 1
-    
-    # Find first +1 and first +2
-    while not (reached_one and reached_two) and not index == n_products and n_dividers > 0:
-        first_cost += costs[index-1]
-        items_remaining = n_products - index
-        if first_cost % 5 == 1:
-            reached_one = True
-            rem_cost, rem_arrangement = greedy_two_choices(items_remaining, n_dividers-1, costs[index:])
-            solution_one = (round_to_five(first_cost) + rem_cost, [index]+[index+i for i in rem_arrangement])
-        if first_cost % 5 == 2:
-            reached_two = True
-            rem_cost, rem_arrangement = greedy_two_choices(items_remaining, n_dividers-1, costs[index:])
-            solution_two = (round_to_five(first_cost) + rem_cost, [index]+[index+i for i in rem_arrangement])
-        index += 1
+def greedy(n_products, n_dividers, costs):
+    """ Greedy algorithm (O(nk)?) """
+    # Obtain the most greedy solution by splitting at all points where 2 cents can be saved
+    greedy_sol = get_two_split(n_products, n_dividers, costs)
+    # If this uses up all dividers, we are done
+    if len(greedy_sol[1]) == n_dividers:
+        return greedy_sol
+    # Try to find the first point where 1 cent can be saved
+    one_idx, one_cost = find_first(n_products, costs, 1)
+    # If this point exists, check if putting a divider there it is beneficial
+    if one_idx != n_products:
+        new_greedy_sol = get_two_split(n_products-one_idx, n_dividers-1, costs[one_idx:])
+        if len(new_greedy_sol[1]) >= len(greedy_sol[1]):
+            rem_cost, rem_checkout = greedy(n_products-one_idx, n_dividers-1, costs[one_idx:])
+            return (one_cost + rem_cost, [one_idx] + [one_idx + i for i in rem_checkout])
+    # Otherwise, put a divider after the first point where 2 cents can be saved
+    two_idx, two_cost = find_first(n_products, costs, 2)
+    if two_idx != n_products:
+        rem_cost, rem_checkout = greedy(n_products-two_idx, n_dividers-1, costs[two_idx:])
+        return (two_cost + rem_cost, [two_idx] + [two_idx + i for i in rem_checkout])
+    # If nothing has been returned yet, return the greedy solution
+    return greedy_sol
 
-    # Return the best solution
-    best_solution = solution_one if solution_one[0] <= solution_two[0] else solution_two
-    return best_solution
+# Example where greedy algorithm fails for now
+n_products, n_dividers, costs = (6, 4, [2, 1, 2, 1, 2, 3])
+print(brute_force(n_products, n_dividers, costs))
+print(greedy(n_products, n_dividers, costs))
