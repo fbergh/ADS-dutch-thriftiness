@@ -18,7 +18,7 @@ def get_simple_problems():
                       [6, 9, 3, 7, 2, 4]]
     n_dividers = [1, 2, 5, 5, 5, 5]
     n_products = [len(costs) for costs in costs_problems]
-    return n_products, n_dividers, costs_problems
+    return [(n_products[i], n_dividers[i], costs_problems[i]) for i in range(len(n_products))]
 
 def get_hard_problems():
     """ Return a list of four 'hard' problems """
@@ -31,4 +31,4 @@ def get_hard_problems():
                       [2, 2, 3, 2, 4, 3, 1, 2, 1, 2, 4, 3, 3, 1, 2]]
     n_dividers = [4,5,13,16,12,10,11]
     n_products = [len(costs) for costs in costs_problems]
-    return n_products, n_dividers, costs_problems
+    return [(n_products[i], n_dividers[i], costs_problems[i]) for i in range(len(n_products))]
