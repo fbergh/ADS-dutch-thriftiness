@@ -1,34 +1,28 @@
+### IMPORTS ###
+
+# Standard library imports
 import random
+import itertools
+
+
+### GENERATING EXAMPLE PROBLEMS ###
 
 def get_random_problem(n_products=None, force_fewer_dividers=False):
     """ Generate a random problem with the given number of products and a random number of dividers """
+    # If the number of products is unspecified, generate it randomly, within the bounds of the assignment
     if n_products == None:
         n_products = random.randint(1,10000)
+    # Generate random costs for each product, within the bounds of the assignment
     costs = [random.randint(1,50000) for _ in range(n_products)]
     n_dividers = random.randint(0, min(len(costs) - 1, 100) if force_fewer_dividers else 100)
     return n_products, n_dividers, costs
 
-def get_simple_problems():
-    """ Return a list of two 'simple' problems """
-    costs_problems = [[10, 23, 43, 637, 45],
-                      [1, 1, 1, 1, 1, 1],
-                      [1, 2, 4, 8, 8, 3],
-                      [2, 4, 3, 6, 7, 7],
-                      [7, 7, 5, 1, 7, 7],
-                      [6, 9, 3, 7, 2, 4]]
-    n_dividers = [1, 2, 5, 5, 5, 5]
-    n_products = [len(costs) for costs in costs_problems]
-    return [(n_products[i], n_dividers[i], costs_problems[i]) for i in range(len(n_products))]
-
-def get_hard_problems():
-    """ Return a list of four 'hard' problems """
-    costs_problems = [[2, 1, 2, 1, 2, 3],
-                      [2, 2, 1, 2, 2, 1, 4, 4, 2, 3, 1, 2, 1, 3, 2, 3, 2, 3],
-                      [2, 1, 2, 1, 2, 1, 1, 4, 2, 3, 3, 2, 4, 1, 3, 3],
-                      [1, 3, 2, 2, 4, 1, 2, 1, 4, 3, 1, 1, 1, 2, 4],
-                      [3, 4, 2, 2, 1, 2, 1, 1, 1, 3, 2, 2, 3, 4, 3, 3, 2, 3],
-                      [4, 3, 4, 4, 4, 3, 3, 4, 3, 1, 3, 4, 4, 3, 1, 2, 2],
-                      [2, 2, 3, 2, 4, 3, 1, 2, 1, 2, 4, 3, 3, 1, 2]]
-    n_dividers = [4,5,13,16,12,10,11]
-    n_products = [len(costs) for costs in costs_problems]
-    return [(n_products[i], n_dividers[i], costs_problems[i]) for i in range(len(n_products))]
+def get_all_problems(n_products=5):
+    problems = []
+    all_sets = itertools.combinations_with_replacement([1,2,3,4], n_products)
+    for s in all_sets:
+        all_costs = list(set([costs for costs in itertools.permutations(s)]))
+        for costs in all_costs:
+            for n_dividers in range(n_products):
+                problems.append((n_products, n_dividers, costs))
+    return problems

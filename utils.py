@@ -44,12 +44,10 @@ def simplify_problem(n_products, n_dividers, costs):
     return new_n_products, min(n_dividers, new_n_products-1), new_costs, additional_cost
 
 def get_simple_solution(n_products, n_dividers, costs):
-    """
-    Checks if a simple solution exists for this problem, and if so, returns it
-    """
+    """ Checks if a simple solution exists for this problem, and if so, returns it """
     # Initialize value that keeps track of total cost and append a 0 to costs (simple way to deal with out-of-bounds look-ahead)
     total_cost = 0
-    costs = costs + [0]
+    costs.append(0)
 
     # Loop through the list of costs
     i = 0
@@ -59,12 +57,7 @@ def get_simple_solution(n_products, n_dividers, costs):
             n_dividers -= 1
             i += 1
         # If a 4 is followed by a 3 (resulting in a gain of 2), add a divider after the 3 and record a cost of 5
-        elif costs[i] == 4 and costs[i+1] == 3:
-            total_cost += 5
-            n_dividers -= 1
-            i += 1
-        # Similarly, if a 3 is followed by a 4, add a divider after the 4 and record a cost of 5
-        elif costs[i] == 3 and costs[i+1] == 4:
+        elif costs[i] == 4 and costs[i+1] == 3 or costs[i] == 3 and costs[i+1] == 4:
             total_cost += 5
             n_dividers -= 1
             i += 1
@@ -88,47 +81,52 @@ def get_simple_solution(n_products, n_dividers, costs):
 
 
 def get_greedy_gain(n_products, n_dividers, costs):
-    """ 
-    Retrieves the most greedy gain possible, by taking all gains of 2 available, then checking if 
-    a gain of 1 exists, and then recursively calling itself from the first gain of 1 it finds 
-    """
-    # Initialize accumulator and index of last divider placed, as well as solution values
-    accumulator, last_divider_idx = 0, 0
-    total_cost, total_gain = 0, 0
-    # Iterate through list of costs
-    for i,c in enumerate(costs):
-        accumulator += c
-        # If the accumulator has encountered a gain of 2 and there are still dividers left
-        if accumulator % 5 == 2 and n_dividers > 0:
-            # Increment the total cost to the rounded value, set the index of the last divider and decrease divider count
+    # If the list of costs is empty, return a cost and a gain of 0
+    if not costs:
+        return 0, 0
+    # Initialize values for accumulator and index of last divider
+    accumulator, last_divider_idx = 0,0
+    # Initialize values for first gain of 1 after the last divider and the corresponding cost 
+    first_one_idx, first_one_cost = 0,0
+    # Initialize result values
+    total_cost, total_gain = 0,0
+
+    # Loop through the list of costs
+    i = 0
+    while i <= n_products:
+        # If we have arrived at the end:
+        if i == n_products:
+            # If possible, go back to the first gain of 1 after the last divider (note: this can happen at most twice!)
+            if first_one_idx > last_divider_idx and n_dividers > 0 and first_one_idx < n_products:
+                total_cost += first_one_cost
+                last_divider_idx = first_one_idx
+                n_dividers -= 1
+                total_gain += 1
+                accumulator = 0
+                i = last_divider_idx
+            # Otherwise, return the result
+            else:
+                total_cost += round_to_five(accumulator)
+                total_gain += accumulator % 5 if accumulator % 5 <= 2 else accumulator % 5 - 5
+                return total_cost, total_gain
+
+        # If we are not at the end, add the current cost to the accumulator
+        accumulator += costs[i]
+        # If a gain of one is found and no such gain has been found since the last divider, set the position of a gain of one to this index
+        if accumulator % 5 == 1 and first_one_idx < last_divider_idx:
+            first_one_idx = i+1
+            first_one_cost = round_to_five(accumulator)
+        # Otherwise, if a gain of 2 is found, "put a divider" after this index
+        elif accumulator % 5 == 2 and n_dividers > 0:
             total_cost += round_to_five(accumulator)
             last_divider_idx = i+1
             n_dividers -= 1
-            # If this is not the last product, increment the gain and reset the accumulator
-            if i < n_products-1:
-                total_gain += accumulator % 5
-                accumulator = 0
-    
-    # If there are still dividers left and the last divider was placed somewhere before the last item
-    if n_dividers > 0 and last_divider_idx < n_products:
-        # Find the first gain of 2
-        one_idx, one_cost = find_first_gain(costs[last_divider_idx:], 1)
-        # If a gain exists, recurse and set total cost and gain to the correct result
-        if one_idx < n_products-last_divider_idx:
-            next_total_cost, next_total_gain = get_greedy_gain(n_products-last_divider_idx-1, n_dividers-1, costs[last_divider_idx+one_idx:])
-            total_cost += one_cost + next_total_cost
-            total_gain += 1 + next_total_gain
-        # If not, simply add the rounded accumulator value and accumulator gain to the total cost and gain
-        else:
-            total_cost += round_to_five(accumulator)
-            total_gain = accumulator % 5 if accumulator % 5 <= 2 else accumulator % 5 - 5
-    # If not, simply add the rounded accumulator value and accumulator gain to the total cost and gain
-    else:
-        total_cost += round_to_five(accumulator)
-        total_gain += accumulator % 5 if accumulator % 5 <= 2 else accumulator % 5 - 5
+            total_gain += 2
+            accumulator = 0
 
-    # Return the total cost and gain
-    return total_cost, total_gain
+        # Go to the next item in the list
+        i += 1
+    
 
 def find_first_gain(costs, gain):
     """ 
