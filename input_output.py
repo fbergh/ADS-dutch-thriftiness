@@ -31,9 +31,11 @@ def get_values_from_input():
     # Return the parsed problem parameters
     return n_products, n_dividers, costs
 
+
 def eprint(*args, **kwargs):
     """ Print to stderror (which logs to the console, for testing on the server) """
     print(*args, file=sys.stderr, **kwargs)
+
 
 def send(answer):
     """ Send answer to the server (by printing to stdout) """

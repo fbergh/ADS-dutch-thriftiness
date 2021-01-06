@@ -13,12 +13,12 @@ from example_problems import *
 
 # Parameters for testing random problems of a given size
 TEST_RANDOM = False
-N_PROBLEMS_RANDOM = 100
-N_PRODUCTS_RANDOM = 20
+N_PROBLEMS_RANDOM = 100000
+N_PRODUCTS_RANDOM = 5
 
 # Parameters for testing all problems of a given size
 TEST_ALL = True
-N_PRODUCTS_ALL = 9
+N_PRODUCTS_ALL = 6
 
 # Verification and verbosity parameters
 VERIFY_BRUTEFORCE = True
@@ -48,6 +48,7 @@ def test_algorithm(problem, algorithm, algorithm_name, verbose=False):
     # Return the answer
     return answer
 
+
 def test_problem(problem):
     """ Test a given problem """
     # Increment the problem counter
@@ -55,9 +56,9 @@ def test_problem(problem):
     n_problems += 1
     # If the answer needs to be verified, run the brute-force algorithm to get the correct solution
     if VERIFY_BRUTEFORCE:
-        solution = test_algorithm(problem, brute_force, "Brute force")
-    # Get the answer from the greedy algorithm
-    answer = test_algorithm(problem, greedy, "Greedy")
+        solution = test_algorithm(problem, brute_force, "Brute Force")
+    # Get the answer from the "simple or greedy" algorithm
+    answer = test_algorithm(problem, simple_or_greedy, "Simple or Greedy")
     # If The answer needs to be verified:
     if VERIFY_BRUTEFORCE:
         # Check if the answer was correct
@@ -78,6 +79,7 @@ def test_problem(problem):
     # Otherwise, if VERBOSE, go to a new line
     elif VERBOSE:
         print("") 
+
 
 def test_problems_list(problems, type):
     """ Test all problems in a list of problems """

@@ -11,6 +11,7 @@ def cost_of_checkout(checkout):
     """ Compute cost of checkout list """
     return sum([round_to_five(sum(part)) for part in checkout])
 
+
 def split_costs(costs, divider_positions):
     """ Split given list of costs according to given divider positions """
     # Add first index of first split and last index of last split
@@ -21,7 +22,7 @@ def split_costs(costs, divider_positions):
     return checkouts
 
 
-### GREEDY UTILITIES ###
+### "SIMPLE OR GREEDY" UTILITIES ###
 
 def simplify_problem(n_products, n_dividers, costs):
     """
@@ -42,42 +43,6 @@ def simplify_problem(n_products, n_dividers, costs):
             new_costs.append(c - rounded_down)
     # Return the simplified problem and the additional cost
     return new_n_products, min(n_dividers, new_n_products-1), new_costs, additional_cost
-
-def get_simple_solution(n_products, n_dividers, costs):
-    """ Checks if a simple solution exists for this problem, and if so, returns it """
-    # Initialize value that keeps track of total cost and append a 0 to costs (simple way to deal with out-of-bounds look-ahead)
-    total_cost = 0
-    costs.append(0)
-
-    # Loop through the list of costs
-    i = 0
-    while i <= n_products and n_dividers > 0:
-        # If two 1s occur in succession (resulting in a gain of 2), add a divider after the second 1
-        if costs[i] == 1 and costs[i+1] == 1:
-            n_dividers -= 1
-            i += 1
-        # If a 4 is followed by a 3 (resulting in a gain of 2), add a divider after the 3 and record a cost of 5
-        elif costs[i] == 4 and costs[i+1] == 3 or costs[i] == 3 and costs[i+1] == 4:
-            total_cost += 5
-            n_dividers -= 1
-            i += 1
-        # If a 3 is followed by a 3 (resulting in a gain of 1), place a divider after the second 3 and record a cost of 5
-        elif costs[i] == 3 and costs[i+1] == 3:
-            total_cost += 5
-            n_dividers -= 1
-            i += 1
-        # If a 1 or a 2 occurs by itself (resulting in a gain of 1 or 2), place a divider directly after it
-        elif costs[i] == 1 or costs[i] == 2:
-            n_dividers -= 1
-        # If any other number occurs by itself, no simple solution exists
-        elif costs[i] > 0:
-            return False, None
-        i += 1
-    # If the final index happens to be the last item, add the rounded cost of that item to the total cost
-    if i == n_products-1:
-        total_cost += round_to_five(costs[n_products-1])
-    # Return whether a simple solution exists (the final product can be reached by placing dividers in an obvious manner) and the total cost of that simple solution
-    return i >= n_products-1, total_cost
 
 
 def get_greedy_gain(n_products, n_dividers, costs):

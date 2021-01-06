@@ -17,6 +17,7 @@ def get_random_problem(n_products=None, force_fewer_dividers=False):
     n_dividers = random.randint(0, min(len(costs) - 1, 100) if force_fewer_dividers else 100)
     return n_products, n_dividers, costs
 
+
 def get_all_problems(n_products=5):
     problems = []
     all_sets = itertools.combinations_with_replacement([1,2,3,4], n_products)
