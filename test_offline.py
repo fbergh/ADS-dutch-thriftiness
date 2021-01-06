@@ -12,12 +12,12 @@ from example_problems import *
 ### TEST PARAMETERS ###
 
 # Parameters for testing random problems of a given size
-TEST_RANDOM = False
-N_PROBLEMS_RANDOM = 100000
+TEST_RANDOM = True
+N_PROBLEMS_RANDOM = 1000
 N_PRODUCTS_RANDOM = 5
 
 # Parameters for testing all problems of a given size
-TEST_ALL = True
+TEST_ALL = False
 N_PRODUCTS_ALL = 6
 
 # Verification and verbosity parameters
