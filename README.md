@@ -1,4 +1,4 @@
-# Algorighms and Data Structures
+# Algorithms and Data Structures
 ## Practical Assignment 2 - Dutch Thriftiness
 ### Submission group 88: Freek van den Bergh (s4801709) and Max Driessen (s4789628)
 
