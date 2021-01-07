@@ -61,7 +61,7 @@ def get_greedy_gain(n_products, n_dividers, costs):
     while i <= n_products:
         # If we have arrived at the end:
         if i == n_products:
-            # If possible, go back to the first gain of 1 after the last divider (note: this can happen at most twice!)
+            # If possible, go back to the first gain of 1 after the last divider
             if first_one_idx > last_divider_idx and n_dividers > 0 and first_one_idx < n_products:
                 total_cost += first_one_cost
                 last_divider_idx = first_one_idx
@@ -77,7 +77,8 @@ def get_greedy_gain(n_products, n_dividers, costs):
 
         # If we are not at the end, add the current cost to the accumulator
         accumulator += costs[i]
-        # If a gain of one is found and no such gain has been found since the last divider, set the position of a gain of one to this index
+        # If a gain of one is found and no such gain has been found since the last divider,
+        # set the position of a gain of one to this index
         if accumulator % 5 == 1 and first_one_idx < last_divider_idx:
             first_one_idx = i+1
             first_one_cost = round_to_five(accumulator)
@@ -94,9 +95,7 @@ def get_greedy_gain(n_products, n_dividers, costs):
     
 
 def find_first_gain(costs, gain):
-    """ 
-    Find the first occurrence of the specified gain (1 or 2)
-    """
+    """ Find the first occurrence of the specified gain (1 or 2) """
     # Initialize accumulator
     accumulator = 0
     # Loop through costs; if the correct gain is found, return the next index

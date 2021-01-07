@@ -19,8 +19,8 @@ def get_values_from_input():
     # Parse number of problems and number of dividers
     n_prod_div_str = input().split(" ")
     n_products, n_dividers = int(n_prod_div_str[0]), int(n_prod_div_str[1])
-    assert 1 <= n_products <= 10000, "Number of products should be in range [1,2500]"
-    assert 0 <= n_dividers <= 100, "Number of products should be in range [0,25]"
+    assert 1 <= n_products <= 10000, "Number of products should be in range [1,10000]"
+    assert 0 <= n_dividers <= 100, "Number of products should be in range [0,100]"
 
     # Parse the costs list
     costs_str = input().split(" ")
