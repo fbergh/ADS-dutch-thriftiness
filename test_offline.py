@@ -12,13 +12,13 @@ from example_problems import *
 ### TEST PARAMETERS ###
 
 # Parameters for testing random problems of a given size
-TEST_RANDOM = True
+TEST_RANDOM = False
 N_PROBLEMS_RANDOM = 1000
 N_PRODUCTS_RANDOM = 5
 
 # Parameters for testing all problems of a given size
-TEST_ALL = False
-N_PRODUCTS_ALL = 6
+TEST_ALL = True
+N_PRODUCTS_ALL = 3
 
 # Verification and verbosity parameters
 VERIFY_BRUTEFORCE = True
@@ -57,8 +57,8 @@ def test_problem(problem):
     # If the answer needs to be verified, run the brute-force algorithm to get the correct solution
     if VERIFY_BRUTEFORCE:
         solution = test_algorithm(problem, brute_force, "Brute Force")
-    # Get the answer from the "simple or greedy" algorithm
-    answer = test_algorithm(problem, simple_or_greedy, "Simple or Greedy")
+    # Get the answer from the "semi-greedy" algorithm
+    answer = test_algorithm(problem, semi_greedy, "Semi-greedy")
     # If The answer needs to be verified:
     if VERIFY_BRUTEFORCE:
         # Check if the answer was correct

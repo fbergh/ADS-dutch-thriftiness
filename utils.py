@@ -22,7 +22,7 @@ def split_costs(costs, divider_positions):
     return checkouts
 
 
-### "SIMPLE OR GREEDY" UTILITIES ###
+### "SEMI-GREEDY" UTILITIES ###
 
 def simplify_problem(n_products, n_dividers, costs):
     """

@@ -2,7 +2,7 @@
 
 # Self-defined imports
 import input_output as io
-from algorithm import simple_or_greedy
+from algorithm import semi_greedy
 
 
 ### ONLINE TESTING ###
@@ -10,7 +10,7 @@ from algorithm import simple_or_greedy
 def test_server():
     """ Solve a problem retrieved from the server """
     n_products, n_dividers, costs = io.get_values_from_input()
-    answer = simple_or_greedy(n_products, n_dividers, costs)
+    answer = semi_greedy(n_products, n_dividers, costs)
     io.send(answer)
 
 
