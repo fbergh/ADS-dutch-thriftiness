@@ -18,7 +18,7 @@ N_PRODUCTS_RANDOM = 5
 
 # Parameters for testing all problems of a given size
 TEST_ALL = True
-N_PRODUCTS_ALL = 8
+N_PRODUCTS_ALL = 5
 
 # Verification and verbosity parameters
 VERIFY_BRUTEFORCE = True
