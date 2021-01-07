@@ -94,14 +94,16 @@ def get_greedy_gain(n_products, n_dividers, costs):
         i += 1
     
 
-def find_first_gain(costs, gain):
+def find_first_gain(n_products, costs, gain):
     """ Find the first occurrence of the specified gain (1 or 2) """
     # Initialize accumulator
     accumulator = 0
     # Loop through costs; if the correct gain is found, return the next index
-    for i,c in enumerate(costs):
-        accumulator += c
+    i = 0
+    while i < n_products:
+        accumulator += costs[i]
         if accumulator % 5 == gain:
             return i+1, accumulator-gain
+        i += 1
     # If the gain was not found, return the length of costs
-    return len(costs), round_to_five(accumulator)
+    return i, round_to_five(accumulator)
