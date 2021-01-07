@@ -19,11 +19,16 @@ def get_random_problem(n_products=None, force_fewer_dividers=False):
 
 
 def get_all_problems(n_products=5):
+    """ Generates all possible distinct problems with the given number of products """
+    # Initialize list for storing all problems
     problems = []
+    # Retrieve all distinct ordered combinations of values from [1,2,3,4]
     all_sets = itertools.combinations_with_replacement([1,2,3,4], n_products)
+    # For each of these ordered sets, store all permutations of this set with all possible numbers of dividers
     for s in all_sets:
         all_costs = list(set([costs for costs in itertools.permutations(s)]))
         for costs in all_costs:
             for n_dividers in range(n_products):
                 problems.append((n_products, n_dividers, costs))
+    # Return the created list of problems
     return problems

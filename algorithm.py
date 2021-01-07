@@ -38,7 +38,7 @@ def brute_force(n_products, n_dividers, costs):
 ### "SIMPLE OR GREEDY" ALGORITHM ###
 
 def semi_greedy(n_products, n_dividers, costs):
-    """ Solve the problem using the "simple or greedy" strategy, after simplifying it """
+    """ Solve the problem using the "semi-greedy" strategy, after simplifying it """
     # Simplify the problem
     simple_n_products, simple_n_dividers, simple_costs, additional_cost = simplify_problem(n_products, n_dividers, costs)
     # Return the "semi-greedy" solution
