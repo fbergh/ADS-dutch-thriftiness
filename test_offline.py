@@ -32,7 +32,7 @@ n_problems, n_correct = 0, 0
 
 ### OFFLINE TESTING ###
 
-def test_algorithm(problem, algorithm, algorithm_name, verbose=False):
+def test_algorithm(problem, algorithm, algorithm_name):
     """ Solve the given problem using the given algorithm """
     # Extract problem parameters
     n_products, n_dividers, costs = problem
@@ -43,7 +43,7 @@ def test_algorithm(problem, algorithm, algorithm_name, verbose=False):
     # Compute end time
     end_time = time.time()
     # If VERBOSE, print the result and how long it took to compute
-    if verbose:
+    if VERBOSE:
         print(f"{algorithm_name}: {answer} ({end_time-start_time:.3f} seconds)")
     # Return the answer
     return answer
