@@ -46,8 +46,8 @@ def simplify_problem(n_products, n_dividers, costs):
 
 
 def get_greedy_gain(n_products, n_dividers, costs):
-    # If the list of costs is empty, return a cost and a gain of 0
-    if not costs:
+    # If the input contains no products, return a cost and a gain of 0
+    if n_products == 0:
         return 0, 0
     # Initialize values for accumulator and index of last divider
     accumulator, last_divider_idx = 0,0
